@@ -54,8 +54,7 @@ audioContext.decodeAudioData(data, buffer => resolve(buffer), error => reject(er
 Promise.all([loadSound('click-strong.wav'), loadSound('click-weak.wav')])
 .then(([buffer1, buffer2]) => {
 sound1 = buffer1;
-sound2 = buffer2;
-})
+sound2 = buffer2;})
 .catch(error => console.error('Error loading sounds:', error));
 
 function playSound(soundBuffer, delay) {
