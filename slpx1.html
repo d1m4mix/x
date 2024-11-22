@@ -41,61 +41,92 @@ text-align: center;}
 
 <script>
 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-const sound1 = new Audio('click-strong.wav');
-const sound2 = new Audio('click-weak.wav');
+let sound1, sound2; // Переменные для хранения аудио буферов
 let isPlaying = false;
 let bpmIndex = 240;
 let playbackTimeouts = [];
 
-function playSound(audio, delay) {
-setTimeout(() => {
-audio.currentTime = 0;
-audio.play();}, delay * 1000);}
+// Функция для загрузки аудио файла в память
+function loadSound(url) {
+  return new Promise((resolve, reject) => {
+    fetch(url)
+      .then(response => response.arrayBuffer())
+      .then(data => {
+        audioContext.decodeAudioData(data, buffer => resolve(buffer), error => reject(error));
+      })
+      .catch(error => reject(error));
+  });
+}
+
+// Загружаем звуковые файлы в память
+Promise.all([loadSound('click-strong.wav'), loadSound('click-weak.wav')])
+  .then(([buffer1, buffer2]) => {
+    sound1 = buffer1;
+    sound2 = buffer2;
+  })
+  .catch(error => console.error('Error loading sounds:', error));
+
+function playSound(soundBuffer, delay) {
+  setTimeout(() => {
+    const source = audioContext.createBufferSource();
+    source.buffer = soundBuffer;
+    source.connect(audioContext.destination);
+    source.start(0);
+  }, delay * 1000);
+}
 
 function calculateTimeForBPM(bpm) {
-return (60 / bpm) * 4;}
+  return (60 / bpm) * 4;
+}
 
 function startPlayback() {
-const bpmList = document.getElementById('bpm-list');
-bpmList.innerHTML = '';
-bpmIndex = 240;
+  const bpmList = document.getElementById('bpm-list');
+  bpmList.innerHTML = '';
+  bpmIndex = 240;
 
-function playNextBPM() {
-if (bpmIndex < 8 || !isPlaying) return;
-let timePerBar = calculateTimeForBPM(bpmIndex);
+  function playNextBPM() {
+    if (bpmIndex < 8 || !isPlaying) return;
+    let timePerBar = calculateTimeForBPM(bpmIndex);
 const bpmItem = document.createElement('p');
-bpmItem.textContent = `bpm: ${bpmIndex}, ${timePerBar.toFixed(2)} s`;
-/*bpmList.appendChild(bpmItem);*/
+bpmItem.textContent = `bpm: ${bpmIndex},${timePerBar.toFixed(2)} s`;
+bpmList.appendChild(bpmItem);
+    for (let i = 0; i < 4; i++) {
+      const delay = i * (timePerBar / 4);
+      if (i === 0) {
+        playSound(sound1, delay);
+      } else {
+        playSound(sound2, delay);
+      }
+    }
 
-for (let i = 0; i < 4; i++) {
-const delay = i * (timePerBar / 4);
-if (i === 0) {
-playSound(sound1, delay);
-} else {
-playSound(sound2, delay);}}
+    bpmIndex--;
+    playbackTimeouts.push(setTimeout(playNextBPM, timePerBar * 1000));
+  }
 
-bpmIndex--;
-playbackTimeouts.push(setTimeout(playNextBPM, timePerBar * 1000));}
-playNextBPM();}
+  playNextBPM();
+}
 
 function togglePlayback() {
-if (isPlaying) {
-isPlaying = false;
-document.getElementById('playStopButton').textContent = 'start';
-playbackTimeouts.forEach(timeout => clearTimeout(timeout));
-playbackTimeouts = [];
-} else {
-isPlaying = true;
-document.getElementById('playStopButton').textContent = 'stop';
-startPlayback();}}
-</script>
+  if (isPlaying) {
+    isPlaying = false;
+    document.getElementById('playStopButton').textContent = 'start';
+    playbackTimeouts.forEach(timeout => clearTimeout(timeout));
+    playbackTimeouts = [];
+  } else {
+    isPlaying = true;
+    document.getElementById('playStopButton').textContent = 'stop';
+    startPlayback();
+  }
+}
 
-<script>
 function calculateTotalTime() {
-let totalTime = 0;
-for (let bpm = 240; bpm >= 8; bpm--) {
-totalTime += calculateTimeForBPM(bpm);}
-return totalTime;}
+  let totalTime = 0;
+  for (let bpm = 240; bpm >= 8; bpm--) {
+    totalTime += calculateTimeForBPM(bpm);
+  }
+  return totalTime;
+}
+
 const totalTimeInSeconds = calculateTotalTime();
 const minutes = Math.floor(totalTimeInSeconds / 60);
 const seconds = Math.round(totalTimeInSeconds % 60);
