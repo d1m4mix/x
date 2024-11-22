@@ -6,28 +6,23 @@
 <link rel="icon" href="favicon.ico" type="image/x-icon">
 <title>slpx1</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Fira+Sans+Extra+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap');
-@font-face {font-family: 'BMNECO'; src: url('https://closdelaroche.github.io/fonts/BMNECO.TTF') format('truetype');}
-html {/*outline: solid red 2px;*/ width: 100%; max-width: 360px; min-width: 360px; margin: 0 auto; overflow-x: hidden;}
-body {/*outline: solid green 2px;*/ height: 96vh; background-color: white; margin: 0 auto; margin-top: 26px; padding-right: 25px; overflow-x: hidden;}
-p {display: inline-block; outline: solid black 2px; width: 100%; margin: 6px; padding: 6.5px; padding-top: 2px; padding-bottom: 2px;}
-.text-dop {font-family: 'Fira Code', sans-serif; font-size: 12px; font-weight: 500;}
-.text-head {font-family: 'Fira Sans Condensed', sans-serif; /*font-style: italic;*/ text-align: center; font-weight: 400;}
+html {/*outline: solid red 2px;*/ display: flex; width: 100%; max-width: 360px; min-width: 360px; margin: 0 auto; overflow-x: hidden;}
+body {/*outline: solid green 2px;*/ height: 96vh; background-color: white; margin: 0 auto; margin-top: 26px; overflow-x: hidden;}
+p {display: inline-block; outline: solid black 2px; width: 100px; margin: 6px; padding: 6.5px; padding-top: 2px; padding-bottom: 2px; justify-content: center;}
 .text-main {text-align: justify; font-family: 'Fira Sans Extra Condensed', sans-serif; /*font-style: italic;*/ font-size: 20px; font-weight: 300;}
+
 #playStopButton {
 border: solid black 2px;
-width: 352px;
-height: 33px;
+width: 80px;
+height: 40px;
 margin-left: 4px;
 margin-top: 4px;
 background-color: white;
 color: black;}
+
 #bpm-list{
-font-family: 'Fira Code';
-font-size: 16px;
-text-align: center;}
+font-family: 'Fira Code';}
 </style>
 </head>
 <body>
@@ -36,7 +31,7 @@ text-align: center;}
 <p class="text-main" style="font-weight: 400; text-align: center;">slp &ndash; x &ndash; 1</p>
 <p class="text-main" style="font-weight: 400; text-align: center;" id="total-time"></p>
 
-<button class="text-main" style="font-weight: 400; text-align: center;" id="playStopButton" onclick="togglePlayback()">start</button>
+<button class="text-main" style="font-weight: 400; text-align: center;" id="playStopButton" onclick="togglePlayback()">START</button>
 
 <div id="bpm-list">&emsp;</div>
 
@@ -99,12 +94,12 @@ playNextBPM();}
 function togglePlayback() {
 if (isPlaying) {
 isPlaying = false;
-document.getElementById('playStopButton').textContent = 'start';
+document.getElementById('playStopButton').textContent = 'START';
 playbackTimeouts.forEach(timeout => clearTimeout(timeout));
 playbackTimeouts = [];
 } else {
 isPlaying = true;
-document.getElementById('playStopButton').textContent = 'stop';
+document.getElementById('playStopButton').textContent = 'STOP';
 startPlayback();}}
 
 function calculateTotalTime() {
