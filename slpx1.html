@@ -79,13 +79,15 @@ if (bpmIndex < 8 || !isPlaying) return;
 let timePerBar = calculateTimeForBPM(bpmIndex);
 const bpmItem = document.createElement('p');
 bpmItem.textContent = `bpm: ${bpmIndex},${timePerBar.toFixed(2)} s`;
-/*bpmList.appendChild(bpmItem);*/
+bpmList.appendChild(bpmItem);
+for (let repeatOuter = 0; repeatOuter < 2; repeatOuter++) {
 for (let i = 0; i < 4; i++) {
 const delay = i * (timePerBar / 4);
+
 if (i === 0) {
 playSound(sound1, delay);
 } else {
-playSound(sound2, delay);}}
+playSound(sound2, delay);}}}
 
 bpmIndex--;
 playbackTimeouts.push(setTimeout(playNextBPM, timePerBar * 1000));}
