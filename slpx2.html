@@ -66,7 +66,7 @@ source.start(0);
 }, delay * 1000);}
 
 function calculateTimeForBPM(bpm) {
-return (60 / bpm) * 8;}
+return (60 / bpm) * 12;}
 
 function startPlayback() {
 const bpmList = document.getElementById('bpm-list');
@@ -83,9 +83,7 @@ for (let repeatOuter = 0; repeatOuter < 2; repeatOuter++) {
 for (let i = 0; i < 8; i++) {
 const delay = i * (timePerBar / 8);
 
-if (i === 4) {
-playSound(sound1, delay);
-} else if (i === 0) {
+if (i === 0 || i === 4) {
 playSound(sound1, delay);
 } else {
 playSound(sound2, delay);}}}
