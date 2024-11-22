@@ -19,6 +19,7 @@ p {display: inline-block; outline: solid black 2px; width: 100%; margin: 6px; pa
 #playStopButton {
 border: solid black 2px;
 width: 352px;
+height: 33px;
 margin-left: 4px;
 margin-top: 4px;
 background-color: white;
@@ -83,7 +84,7 @@ if (bpmIndex < 8 || !isPlaying) return;
 let timePerBar = calculateTimeForBPM(bpmIndex);
 const bpmItem = document.createElement('p');
 bpmItem.textContent = `bpm: ${bpmIndex},${timePerBar.toFixed(2)} s`;
-bpmList.appendChild(bpmItem);
+/*bpmList.appendChild(bpmItem);*/
 for (let i = 0; i < 4; i++) {
 const delay = i * (timePerBar / 4);
 if (i === 0) {
