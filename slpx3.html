@@ -77,7 +77,7 @@ function playNextBPM() {
 if (bpmIndex < 8 || !isPlaying) return;
 let timePerBar = calculateTimeForBPM(bpmIndex);
 const bpmItem = document.createElement('p');
-bpmItem.textContent = `bpm: ${bpmIndex},${timePerBar.toFixed(2)} s`;
+bpmItem.textContent = `bpm: ${bpmIndex} - ${timePerBar.toFixed(2)} s`;
 bpmList.appendChild(bpmItem);
 for (let repeatOuter = 0; repeatOuter < 2; repeatOuter++) {
 for (let i = 0; i < 12; i++) {
