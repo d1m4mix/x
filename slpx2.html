@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<title>slpx2</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fira+Sans+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fira+Sans+Extra+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap');
+@font-face {font-family: 'BMNECO'; src: url('https://closdelaroche.github.io/fonts/BMNECO.TTF') format('truetype');}
+html {/*outline: solid red 2px;*/ width: 100%; max-width: 360px; min-width: 360px; margin: 0 auto; overflow-x: hidden;}
+body {/*outline: solid green 2px;*/ height: 96vh; background-color: white; margin: 0 auto; margin-top: 26px; padding-right: 25px; overflow-x: hidden;}
+p {display: inline-block; outline: solid black 2px; width: 100%; margin: 6px; padding: 6.5px; padding-top: 2px; padding-bottom: 2px;}
+.text-dop {font-family: 'Fira Code', sans-serif; font-size: 12px; font-weight: 500;}
+.text-head {font-family: 'Fira Sans Condensed', sans-serif; /*font-style: italic;*/ text-align: center; font-weight: 400;}
+.text-main {text-align: justify; font-family: 'Fira Sans Extra Condensed', sans-serif; /*font-style: italic;*/ font-size: 20px; font-weight: 300;}
+#playStopButton {
+border: solid black 2px;
+width: 352px;
+margin-left: 4px;
+background-color: whitesmoke;
+color: black;}
+#bpm-list{
+font-family: 'Fira Code';
+font-size: 16px;
+text-align: center;}
+</style>
+</head>
+<body>
+<p class="text-main" style="font-weight: 400; text-align: center;">slp &ndash; x &ndash; 2</p>
+<p class="text-main" style="font-weight: 400; text-align: center;" id="total-time"></p>
+
+<button class="text-main" style="font-weight: 400; text-align: center;" id="playStopButton" onclick="togglePlayback()">start</button>
+
+<div id="bpm-list">&emsp;</div>
+
+<script>
+const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+const sound1 = new Audio('click-strong.wav');
+const sound2 = new Audio('click-weak.wav');
+let isPlaying = false;
+let bpmIndex = 240;
+let playbackTimeouts = [];
+
+function playSound(audio, delay) {
+setTimeout(() => {
+audio.currentTime = 0;
+audio.play();
+}, delay * 1000);}
+
+function calculateTimeForBPM(bpm) {
+return (60 / bpm) * 8;}
+
+function startPlayback() {
+const bpmList = document.getElementById('bpm-list');
+bpmList.innerHTML = '';
+bpmIndex = 240;
+
+function playNextBPM() {
+if (bpmIndex < 8 || !isPlaying) return;
+let timePerBar = calculateTimeForBPM(bpmIndex);
+const bpmItem = document.createElement('p');
+bpmItem.textContent = `bpm: ${bpmIndex},${timePerBar.toFixed(2)} s`;
+/*bpmList.appendChild(bpmItem);*/
+
+for (let repeatOuter = 0; repeatOuter < 2; repeatOuter++) {
+for (let i = 0; i < 8; i++) {
+const delay = i * (timePerBar / 8);
+
+if (i === 4) {
+playSound(sound1, delay);
+} else if (i === 0) {
+playSound(sound1, delay);
+} else {
+playSound(sound2, delay);}}}
+
+bpmIndex--;
+playbackTimeouts.push(setTimeout(playNextBPM, timePerBar * 1000));}
+
+playNextBPM();}
+
+function togglePlayback() {
+if (isPlaying) {
+isPlaying = false;
+document.getElementById('playStopButton').textContent = 'start';
+playbackTimeouts.forEach(timeout => clearTimeout(timeout));
+playbackTimeouts = [];
+} else {
+isPlaying = true;
+document.getElementById('playStopButton').textContent = 'stop';
+startPlayback();}}
+</script>
+
+<script>
+function calculateTotalTime() {
+let totalTime = 0;
+for (let bpm = 240; bpm >= 8; bpm--) {
+totalTime += calculateTimeForBPM(bpm);}
+return totalTime;}
+const totalTimeInSeconds = calculateTotalTime();
+const minutes = Math.floor(totalTimeInSeconds / 60);
+const seconds = Math.round(totalTimeInSeconds % 60);
+document.getElementById('total-time').textContent = `${minutes} m ${seconds} s`;
+</script>
+
+
+</body>
+</html>
