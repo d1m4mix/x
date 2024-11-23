@@ -11,85 +11,65 @@
 document.addEventListener('DOMContentLoaded', function() {
 const players = document.querySelectorAll('.ap');
 let isSyncing = false;
-
-// Устанавливаем начальный прогресс для всех плееров, чтобы избежать короткой остановки
 players.forEach(function(player) {
 const plyr = new Plyr(player, { controls: ['play', 'progress'] });
-
-// Устанавливаем начальное состояние прогресса всех плееров, чтобы избежать проблемы с первым запуском
 player.currentTime = 0;
-
-// Функция для плавной синхронизации прогресса
+function syncVolume(volume) {
+players.forEach(function(otherPlayer) {
+const otherPlyr = new Plyr(otherPlayer, { controls: ['play', 'progress'] });
+otherPlyr.volume = volume;
+const buttonsOnPlayer = otherPlayer.parentElement.querySelectorAll('.controls button');
+buttonsOnPlayer.forEach(b => b.classList.remove('active'));
+const activeButton = Array.from(buttonsOnPlayer).find(b => b.dataset.volume == volume);
+if (activeButton) {
+activeButton.classList.add('active');}});}
+const controlsContainer = document.createElement('div');
+controlsContainer.classList.add('controls');
+const buttons = [
+{ text: '00', class: 'db-0', volume: 1 },
+{ text: '12', class: 'db-12', volume: 0.25 },
+{ text: '24', class: 'db-24', volume: 0.0625 },
+{ text: '36', class: 'db-36', volume: 0.0156 },
+{ text: '48', class: 'db-48', volume: 0.0032 }];
+buttons.forEach((btn, index) => {
+const button = document.createElement('button');
+button.textContent = btn.text;
+button.classList.add(btn.class);
+button.dataset.volume = btn.volume;
+if (index === 0) {
+button.classList.add('active');
+plyr.volume = btn.volume;}
+button.addEventListener('click', function() {
+syncVolume(btn.volume);});
+controlsContainer.appendChild(button);});
+player.parentElement.appendChild(controlsContainer);});});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+const players = document.querySelectorAll('.ap');
+let isSyncing = false;
+players.forEach(function(player) {
+const plyr = new Plyr(player, { controls: ['play', 'progress'] });
+player.currentTime = 0;
 function syncProgress(sourcePlayer) {
 const currentTime = sourcePlayer.currentTime;
 players.forEach(function(otherPlayer) {
 if (otherPlayer !== sourcePlayer && !isSyncing) {
 isSyncing = true;
 const timeDifference = Math.abs(otherPlayer.currentTime - currentTime);
-
-// Если разница во времени слишком велика, то синхронизируем плавно
-if (timeDifference > 0.05) { // Уменьшаем допуск для более точной синхронизации
-otherPlayer.currentTime = currentTime + (currentTime - otherPlayer.currentTime) * 0.05; // Меньше поправка для плавного синхронизирования
-}
-isSyncing = false;
-}
-});
-}
-
-// Обработка события воспроизведения
+if (timeDifference > 0.05) {
+otherPlayer.currentTime = currentTime + (currentTime - otherPlayer.currentTime) * 0.05;}
+isSyncing = false;}});}
 player.addEventListener('play', function() {
-// Убедимся, что все другие плееры ставятся на паузу, кроме текущего
 players.forEach(function(otherPlayer) {
 if (otherPlayer !== player && !otherPlayer.paused) {
-otherPlayer.pause(); // Ставим все другие плееры на паузу
-}
-});
-// Синхронизируем время между всеми плеерами сразу при старте
+otherPlayer.pause();}});
 players.forEach(function(otherPlayer) {
 if (otherPlayer !== player) {
-otherPlayer.currentTime = player.currentTime;
-}
-});
-});
-
-// Обработка события обновления времени
+otherPlayer.currentTime = player.currentTime;}});});
 player.addEventListener('timeupdate', function() {
 if (!isSyncing) {
-syncProgress(player); // Синхронизируем прогресс между плеерами
-}
-});
-
-// Добавление кнопок для изменения громкости
-const controlsContainer = document.createElement('div');
-controlsContainer.classList.add('controls');
-
-const buttons = [
-{ text: '00', class: 'db-0', volume: 1 },
-{ text: '12', class: 'db-12', volume: 0.25 },
-{ text: '24', class: 'db-24', volume: 0.0625 },
-{ text: '36', class: 'db-36', volume: 0.0156 },
-{ text: '48', class: 'db-48', volume: 0.0032 }
-];
-
-buttons.forEach((btn, index) => {
-const button = document.createElement('button');
-button.textContent = btn.text;
-button.classList.add(btn.class);
-if (index === 0) {
-button.classList.add('active');
-plyr.volume = btn.volume;
-}
-button.addEventListener('click', function() {
-plyr.volume = btn.volume;
-controlsContainer.querySelectorAll('button').forEach(b => b.classList.remove('active'));
-button.classList.add('active');
-});
-controlsContainer.appendChild(button);
-});
-
-player.parentElement.appendChild(controlsContainer);
-});
-});
+syncProgress(player); }});});});
 </script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&display=swap');
