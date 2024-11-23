@@ -13,28 +13,33 @@ const players = document.querySelectorAll('.ap');
 let isSyncing = false;
 players.forEach(function(player) {
 const plyr = new Plyr(player, { controls: ['play', 'progress'] });
-player.currentTime = 0;
+
+/*player.currentTime = 0;*/
+
 function syncVolume(volume) {
 players.forEach(function(otherPlayer) {
 const otherPlyr = new Plyr(otherPlayer, { controls: ['play', 'progress'] });
+
 otherPlyr.volume = volume;
+
 const buttonsOnPlayer = otherPlayer.parentElement.querySelectorAll('.controls button');
 buttonsOnPlayer.forEach(b => b.classList.remove('active'));
 const activeButton = Array.from(buttonsOnPlayer).find(b => b.dataset.volume == volume);
 if (activeButton) {
 activeButton.classList.add('active');}});}
+
 const controlsContainer = document.createElement('div');
 controlsContainer.classList.add('controls');
 const buttons = [
-{ text: '00', class: 'db-0', volume: 1 },
-{ text: '12', class: 'db-12', volume: 0.25 },
-{ text: '24', class: 'db-24', volume: 0.0625 },
-{ text: '36', class: 'db-36', volume: 0.0156 },
-{ text: '48', class: 'db-48', volume: 0.0032 }];
+{ text: '00', volume: 1 },
+{ text: '12', volume: 0.25 },
+{ text: '24', volume: 0.0625 },
+{ text: '36', volume: 0.0156 },
+{ text: '48', volume: 0.0032 }];
+
 buttons.forEach((btn, index) => {
 const button = document.createElement('button');
 button.textContent = btn.text;
-button.classList.add(btn.class);
 button.dataset.volume = btn.volume;
 if (index === 0) {
 button.classList.add('active');
@@ -44,6 +49,8 @@ syncVolume(btn.volume);});
 controlsContainer.appendChild(button);});
 player.parentElement.appendChild(controlsContainer);});});
 </script>
+
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
 const players = document.querySelectorAll('.ap');
