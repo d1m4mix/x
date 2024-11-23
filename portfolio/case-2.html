@@ -50,14 +50,13 @@ controlsContainer.appendChild(button);});
 player.parentElement.appendChild(controlsContainer);});});
 </script>
 
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
 const players = document.querySelectorAll('.ap');
 let isSyncing = false;
 players.forEach(function(player) {
 const plyr = new Plyr(player, { controls: ['play', 'progress'] });
-player.currentTime = 0;
+/*player.currentTime = 0;*/
 function syncProgress(sourcePlayer) {
 const currentTime = sourcePlayer.currentTime;
 players.forEach(function(otherPlayer) {
@@ -67,6 +66,7 @@ const timeDifference = Math.abs(otherPlayer.currentTime - currentTime);
 if (timeDifference > 0.05) {
 otherPlayer.currentTime = currentTime + (currentTime - otherPlayer.currentTime) * 0.05;}
 isSyncing = false;}});}
+
 player.addEventListener('play', function() {
 players.forEach(function(otherPlayer) {
 if (otherPlayer !== player && !otherPlayer.paused) {
