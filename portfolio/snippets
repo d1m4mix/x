@@ -1,0 +1,11 @@
+<audio id="ap" controls>
+<source src="https://closdelaroche.github.io/audio/znaeshliti.mp3" type="audio/mp3">
+</audio>
+
+
+<button id="db-0">-00dB</button>
+<button id="db-12">-12dB</button>
+<button id="db-48">-48dB</button>
+
+
+/*https://closdelaroche.github.io*/
