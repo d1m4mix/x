@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" href="favicon.ico" type="image/x-icon">
-<title>mixing-portfolio</title>
+<title>case-2</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/plyr@3.7.7/dist/plyr.css" />
 <script src="https://cdn.jsdelivr.net/npm/plyr@3.7.7/dist/plyr.js"></script>
 <script>
@@ -84,36 +84,36 @@ p {display: inline-block; outline: solid black 2px; width: 100%; margin: 6px; pa
 .controls button.active {background-color: #522e93; color: white; border: solid black 2px;}
 .plyr__progress {width: 92%;}
 .plyr--full-ui input[type=range] {color: #522e93;}
-.plyr__control {-webkit-tap-highlight-color: transparent; background-color: white !important; color: #522e93 !important;}
+.plyr__control {-webkit-tap-highlight-color: transparent; background-color: white !important; color: #7BA05B !important;}
 .plyr__control:hover {background-color: inherit; color: inherit; cursor: inherit; transition: none;}
 </style>
 </head>
 <body>
 
 
-<div><!--кейс-1-strange-to-me--><p style="font-weight: 400; text-align: center;">кейс #1</p>
-<p>трек #1: ov = 5.8 &rarr; cv = 5.9</p><!--wiiner-->
+<div><!--кейс-2-stop-right-now--><p style="font-weight: 400; text-align: center;">кейс #2 stop-right-now-by-codie-west</p>
+<p>трек #1: ov =  &rarr; cv = </p><!--official-->
 <div class="player-container">
 <audio class="ap" controls>
-<source src="audio/winner.mp3" type="audio/mp3">
+<source src="audio/srn-official.mp3" type="audio/mp3">
 </audio>
 </div>
-<p>трек #2: ov = 4.6 &rarr; cv = 5.9</p><!--second-->
+<p>трек #2: ov =  &rarr; cv = </p><!--winner-->
 <div class="player-container">
 <audio class="ap" controls>
-<source src="audio/second.mp3" type="audio/mp3">
+<source src="audio/srn-winner.mp3" type="audio/mp3">
 </audio>
 </div>
-<p>трек #3: ov = 5.9 &rarr; cv = 5.9</p><!--third-->
+<p>трек #3: ov =  &rarr; cv = </p><!--second-->
 <div class="player-container">
 <audio class="ap" controls>
-<source src="audio/third.mp3" type="audio/mp3">
+<source src="audio/srn-second.mp3" type="audio/mp3">
 </audio>
 </div>
-<p>трек #4: ov = 5.8 &rarr; cv = 5.9</p><!--mine-->
+<p>трек #4: ov =  &rarr; cv = </p><!--mine-->
 <div class="player-container">
 <audio class="ap" controls>
-<source src="audio/mine.mp3" type="audio/mp3">
+<source src="audio/srn-mine.mp3" type="audio/mp3">
 </audio>
 </div>
 </div>
