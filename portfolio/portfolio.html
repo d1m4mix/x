@@ -46,53 +46,30 @@ player.parentElement.appendChild(controlsContainer);});});
 </script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const players = document.querySelectorAll('.ap');
-    let isSyncing = false;
-
-    players.forEach(function(player) {
-        const plyr = new Plyr(player, { controls: ['play', 'progress'] });
-        player.currentTime = 0;
-
-        // Функция для синхронизации прогресса между плеерами
-        function syncProgress(sourcePlayer) {
-            const currentTime = sourcePlayer.currentTime;
-            players.forEach(function(otherPlayer) {
-                if (otherPlayer !== sourcePlayer && !isSyncing) {
-                    isSyncing = true;
-                    const timeDifference = Math.abs(otherPlayer.currentTime - currentTime);
-                    // Если разница во времени велика, то синхронизируем
-                    if (timeDifference > 0.05) {
-                        otherPlayer.currentTime = currentTime;
-                    }
-                    isSyncing = false;
-                }
-            });
-        }
-
-        // Синхронизация времени на всех плеерах при запуске воспроизведения
-        player.addEventListener('play', function() {
-            players.forEach(function(otherPlayer) {
-                if (otherPlayer !== player && !otherPlayer.paused) {
-                    otherPlayer.pause(); // Поставим все другие плееры на паузу
-                }
-            });
-
-            // Синхронизируем все плееры на тот же момент времени
-            players.forEach(function(otherPlayer) {
-                if (otherPlayer !== player) {
-                    otherPlayer.currentTime = player.currentTime;
-                }
-            });
-        });
-
-        // Синхронизация времени при обновлении времени плеера
-        player.addEventListener('timeupdate', function() {
-            if (!isSyncing) {
-                syncProgress(player);
-            }
-        });
-    });
-});
+const players = document.querySelectorAll('.ap');
+let isSyncing = false;
+players.forEach(function(player) {
+const plyr = new Plyr(player, { controls: ['play', 'progress'] });
+player.currentTime = 0;
+function syncProgress(sourcePlayer) {
+const currentTime = sourcePlayer.currentTime;
+players.forEach(function(otherPlayer) {
+if (otherPlayer !== sourcePlayer && !isSyncing) {
+isSyncing = true;
+const timeDifference = Math.abs(otherPlayer.currentTime - currentTime);
+if (timeDifference > 0.05) {
+otherPlayer.currentTime = currentTime + (currentTime - otherPlayer.currentTime) * 0.05;}
+isSyncing = false;}});}
+player.addEventListener('play', function() {
+players.forEach(function(otherPlayer) {
+if (otherPlayer !== player && !otherPlayer.paused) {
+otherPlayer.pause();}});
+players.forEach(function(otherPlayer) {
+if (otherPlayer !== player) {
+otherPlayer.currentTime = player.currentTime;}});});
+player.addEventListener('timeupdate', function() {
+if (!isSyncing) {
+syncProgress(player); }});});});
 </script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&display=swap');
