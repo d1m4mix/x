@@ -9,74 +9,71 @@
 <script src="https://cdn.jsdelivr.net/npm/plyr@3.7.7/dist/plyr.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-const players = document.querySelectorAll('.ap');
-let isSyncing = false;
-players.forEach(function(player) {
-const plyr = new Plyr(player, { controls: ['play', 'progress'] });
+  const players = document.querySelectorAll('.ap');
+  players.forEach(function(player) {
+    const plyr = new Plyr(player, { controls: ['play', 'progress'] });
 
-/*player.currentTime = 0;*/
+    // Убираем синхронизацию времени
+    /*player.currentTime = 0;*/
 
-function syncVolume(volume) {
-players.forEach(function(otherPlayer) {
-const otherPlyr = new Plyr(otherPlayer, { controls: ['play', 'progress'] });
+    function syncVolume(volume) {
+      players.forEach(function(otherPlayer) {
+        const otherPlyr = new Plyr(otherPlayer, { controls: ['play', 'progress'] });
+        otherPlyr.volume = volume;
 
-otherPlyr.volume = volume;
+        const buttonsOnPlayer = otherPlayer.parentElement.querySelectorAll('.controls button');
+        buttonsOnPlayer.forEach(b => b.classList.remove('active'));
+        const activeButton = Array.from(buttonsOnPlayer).find(b => b.dataset.volume == volume);
+        if (activeButton) {
+          activeButton.classList.add('active');
+        }
+      });
+    }
 
-const buttonsOnPlayer = otherPlayer.parentElement.querySelectorAll('.controls button');
-buttonsOnPlayer.forEach(b => b.classList.remove('active'));
-const activeButton = Array.from(buttonsOnPlayer).find(b => b.dataset.volume == volume);
-if (activeButton) {
-activeButton.classList.add('active');}});}
+    const controlsContainer = document.createElement('div');
+    controlsContainer.classList.add('controls');
+    const buttons = [
+      { text: '00', volume: 1 },
+      { text: '12', volume: 0.25 },
+      { text: '24', volume: 0.0625 },
+      { text: '36', volume: 0.0156 },
+      { text: '48', volume: 0.0032 }
+    ];
 
-const controlsContainer = document.createElement('div');
-controlsContainer.classList.add('controls');
-const buttons = [
-{ text: '00', volume: 1 },
-{ text: '12', volume: 0.25 },
-{ text: '24', volume: 0.0625 },
-{ text: '36', volume: 0.0156 },
-{ text: '48', volume: 0.0032 }];
-
-buttons.forEach((btn, index) => {
-const button = document.createElement('button');
-button.textContent = btn.text;
-button.dataset.volume = btn.volume;
-if (index === 0) {
-button.classList.add('active');
-plyr.volume = btn.volume;}
-button.addEventListener('click', function() {
-syncVolume(btn.volume);});
-controlsContainer.appendChild(button);});
-player.parentElement.appendChild(controlsContainer);});});
+    buttons.forEach((btn, index) => {
+      const button = document.createElement('button');
+      button.textContent = btn.text;
+      button.dataset.volume = btn.volume;
+      if (index === 0) {
+        button.classList.add('active');
+        plyr.volume = btn.volume;
+      }
+      button.addEventListener('click', function() {
+        syncVolume(btn.volume);
+      });
+      controlsContainer.appendChild(button);
+    });
+    player.parentElement.appendChild(controlsContainer);
+  });
+});
 </script>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-const players = document.querySelectorAll('.ap');
-let isSyncing = false;
-players.forEach(function(player) {
-const plyr = new Plyr(player, { controls: ['play', 'progress'] });
-/*player.currentTime = 0;*/
-function syncProgress(sourcePlayer) {
-const currentTime = sourcePlayer.currentTime;
-players.forEach(function(otherPlayer) {
-if (otherPlayer !== sourcePlayer && !isSyncing) {
-isSyncing = true;
-const timeDifference = Math.abs(otherPlayer.currentTime - currentTime);
-if (timeDifference > 0.05) {
-otherPlayer.currentTime = currentTime + (currentTime - otherPlayer.currentTime) * 0.05;}
-isSyncing = false;}});}
+  const players = document.querySelectorAll('.ap');
+  players.forEach(function(player) {
+    const plyr = new Plyr(player, { controls: ['play', 'progress'] });
 
-player.addEventListener('play', function() {
-players.forEach(function(otherPlayer) {
-if (otherPlayer !== player && !otherPlayer.paused) {
-otherPlayer.pause();}});
-players.forEach(function(otherPlayer) {
-if (otherPlayer !== player) {
-otherPlayer.currentTime = player.currentTime;}});});
-player.addEventListener('timeupdate', function() {
-if (!isSyncing) {
-syncProgress(player); }});});});
+    // Убираем синхронизацию времени между плеерами
+    player.addEventListener('play', function() {
+      players.forEach(function(otherPlayer) {
+        if (otherPlayer !== player && !otherPlayer.paused) {
+          otherPlayer.pause();
+        }
+      });
+    });
+  });
+});
 </script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&display=swap');
