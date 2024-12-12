@@ -4,34 +4,189 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" href="favicon.ico" type="image/x-icon">
-<title>main</title>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Fira+Sans+Extra+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap');
-html, body {height: 100vh; width: 100vw; display: flex; justify-content: center;}
-body {/*border: solid green 2px;*/ width: 360px;}
+<title>case-1</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/plyr@3.7.7/dist/plyr.css" />
+<script src="https://cdn.jsdelivr.net/npm/plyr@3.7.7/dist/plyr.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const players = document.querySelectorAll('.ap');
+  players.forEach(function(player) {
+    const plyr = new Plyr(player, { controls: ['play', 'progress'] });
 
-a {
-display: flex;
-align-items: center;
-justify-content: center;
-font-family: 'Fira Sans Extra Condensed', sans-serif;
-font-size: 20px;
-font-weight: 400;
-text-align: center;
-min-width: 360px;
-height: 36px;
-margin-top: 0px;
-text-decoration: none;
-color: black;
-border: solid black 2px;}
+    // Убираем синхронизацию времени
+    /*player.currentTime = 0;*/
+
+    function syncVolume(volume) {
+      players.forEach(function(otherPlayer) {
+        const otherPlyr = new Plyr(otherPlayer, { controls: ['play', 'progress'] });
+        otherPlyr.volume = volume;
+
+        const buttonsOnPlayer = otherPlayer.parentElement.querySelectorAll('.controls button');
+        buttonsOnPlayer.forEach(b => b.classList.remove('active'));
+        const activeButton = Array.from(buttonsOnPlayer).find(b => b.dataset.volume == volume);
+        if (activeButton) {
+          activeButton.classList.add('active');
+        }
+      });
+    }
+
+    const controlsContainer = document.createElement('div');
+    controlsContainer.classList.add('controls');
+    const buttons = [
+      { text: '00', volume: 1 },
+      { text: '12', volume: 0.25 },
+      { text: '24', volume: 0.0625 },
+      { text: '36', volume: 0.0156 },
+      { text: '48', volume: 0.0032 }
+    ];
+
+    buttons.forEach((btn, index) => {
+      const button = document.createElement('button');
+      button.textContent = btn.text;
+      button.dataset.volume = btn.volume;
+      if (index === 0) {
+        button.classList.add('active');
+        plyr.volume = btn.volume;
+      }
+      button.addEventListener('click', function() {
+        syncVolume(btn.volume);
+      });
+      controlsContainer.appendChild(button);
+    });
+    player.parentElement.appendChild(controlsContainer);
+  });
+});
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const players = document.querySelectorAll('.ap');
+  players.forEach(function(player) {
+    const plyr = new Plyr(player, { controls: ['play', 'progress'] });
+
+    // Убираем синхронизацию времени между плеерами
+    player.addEventListener('play', function() {
+      players.forEach(function(otherPlayer) {
+        if (otherPlayer !== player && !otherPlayer.paused) {
+          otherPlayer.pause();
+        }
+      });
+    });
+  });
+});
+</script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fira+Sans+Extra+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap');
+html {/*outline: solid red 2px;*/ width: 100%; max-width: 360px; min-width: 360px; margin: 0 auto; overflow-x: hidden;}
+body {/*outline: solid green 2px;*/ height: 96vh; background-color: white; margin: 0 auto; margin-top: 26px; padding-right: 25px; overflow-x: hidden; text-align: justify; font-family: 'Fira Sans Extra Condensed', sans-serif; /*font-style: italic;*/ font-size: 20px; font-weight: 300;}
+p {display: inline-block; outline: solid black 2px; width: 100%; margin: 6px; padding: 6.5px; padding-top: 2px; padding-bottom: 2px;}
+.player-container{outline: solid black 2px; margin: 6px; margin-bottom: 6px; width: 328px !important; padding: 10px; padding-top: 0px;}
+.controls {display: flex; justify-content: center; font-family: 'Fira Code'; font-size: 14px; font-weight: 600; gap: 3px;}
+.controls button {-webkit-tap-highlight-color: transparent; cursor: auto; width: 58px !important; background-color: white; color: black; transition: none; border: solid black 2px;}
+.controls button:hover {background-color: inherit; color: inherit; cursor: inherit;transition: none;}
+.controls button.active {background-color: #522e93; color: white; border: solid black 2px;}
+.plyr__progress {width: 92%;}
+.plyr--full-ui input[type=range] {color: #522e93;}
+.plyr__control {-webkit-tap-highlight-color: transparent; background-color: white !important; color: #7BA05B !important;}
+.plyr__control:hover {background-color: inherit; color: inherit; cursor: inherit; transition: none;}
 </style>
 </head>
 <body>
-<div>
 
-<p>&emsp;</p>
-<a href="portfolio/main-portfolio.html">portfolio</a><br>
+<p>все уровни приведены к одному, изменения отображены для каждого трека, где ov &ndash; оригинальный уровень, а cv &ndash; текущий. все значения в -LUFS. мобильная версия страницы работает не корректно, пользуйтесь десктопной.</p>
+<div>&emsp;</div>
 
+
+<div><!--кейс-1-strange-to-me--><p style="font-weight: 400; text-align: center;">кейс #1 strange-to-me-by-ridge-dawn</p>
+<p>трек #1: ov = 5.8 &rarr; cv = 5.9</p><!--wiiner-->
+<div class="player-container">
+<audio class="ap" controls>
+<source src="audio/stm-winner.mp3" type="audio/mp3">
+</audio>
 </div>
+<p>трек #2: ov = 4.6 &rarr; cv = 5.9</p><!--second-->
+<div class="player-container">
+<audio class="ap" controls>
+<source src="audio/stm-second.mp3" type="audio/mp3">
+</audio>
+</div>
+<p>трек #3: ov = 5.9 &rarr; cv = 5.9</p><!--third-->
+<div class="player-container">
+<audio class="ap" controls>
+<source src="audio/stm-third.mp3" type="audio/mp3">
+</audio>
+</div>
+<p>трек #4: ov = 5.8 &rarr; cv = 5.9</p><!--mine-->
+<div class="player-container">
+<audio class="ap" controls>
+<source src="audio/stm-mine.mp3" type="audio/mp3">
+</audio>
+</div>
+</div>
+<div>&emsp;</div>
+<div>&emsp;</div>
+
+
+<div><!--кейс-2-best-of-me--><p style="font-weight: 400; text-align: center;">кейс #2 best-of-me-by-hannah-mundine</p>
+<p>трек #1: ov = 6.3 &rarr; cv = 6.2</p><!--official-->
+<div class="player-container">
+<audio class="ap" controls>
+<source src="audio/bom-official.mp3" type="audio/mp3">
+</audio>
+</div>
+<p>трек #2: ov = 6.3 &rarr; cv = 6.4</p><!--winner-->
+<div class="player-container">
+<audio class="ap" controls>
+<source src="audio/bom-winner.mp3" type="audio/mp3">
+</audio>
+</div>
+<p>трек #3: ov = 7.3 &rarr; cv = 6.4</p><!--second-->
+<div class="player-container">
+<audio class="ap" controls>
+<source src="audio/bom-second.mp3" type="audio/mp3">
+</audio>
+</div>
+<p>трек #4: ov = 6.3 &rarr; cv = 6.4</p><!--mine-->
+<div class="player-container">
+<audio class="ap" controls>
+<source src="audio/bom-mine.mp3" type="audio/mp3">
+</audio>
+</div>
+</div>
+
+
+
+<div><!--кейс-3-stop-right-now--><p style="font-weight: 400; text-align: center;">кейс #3 stop-right-now-by-codie-west</p>
+<p>трек #1: ov = 6.1 &rarr; cv = 6.2</p><!--official-->
+<div class="player-container">
+<audio class="ap" controls>
+<source src="audio/srn-official.mp3" type="audio/mp3">
+</audio>
+</div>
+<p>трек #2: ov = 5.5 &rarr; cv = 6.2</p><!--winner-->
+<div class="player-container">
+<audio class="ap" controls>
+<source src="audio/srn-winner.mp3" type="audio/mp3">
+</audio>
+</div>
+<p>трек #3: ov = 7.5 &rarr; cv = 6.2</p><!--second-->
+<div class="player-container">
+<audio class="ap" controls>
+<source src="audio/srn-second.mp3" type="audio/mp3">
+</audio>
+</div>
+<p>трек #4: ov = 6.2 &rarr; cv = 6.2</p><!--mine-->
+<div class="player-container">
+<audio class="ap" controls>
+<source src="audio/srn-mine.mp3" type="audio/mp3">
+</audio>
+</div>
+</div>
+
+
+
+
+
 </body>
 </html>
