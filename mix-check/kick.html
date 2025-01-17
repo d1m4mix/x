@@ -15,24 +15,36 @@ p {display: inline-block; outline: solid black 2px; width: 100%; margin: 6px; pa
 .button {
 display: inline-block;
 font-size: 20px;
-font-weight: 400;
 color: black;
 text-decoration: none;
-text-align: center;
-}
+text-align: center;}
 </style>
 </head>
 <body>
 
 
-<p><a href="/skill-test.html" class="button">my-skill-test</a></p>
-<p><a href="mix-check/mix-check.html" class="button">your-mix-check</a></p>
+<p style="font-size: 24px;">kick</p>
+<p>
+<span style="font-weight: 400;">лоу-энд</span><br>
+только пинок?<label><input type="checkbox" class="checkbox_0"></label><br>
+нота и пинок?<label><input type="checkbox" class="checkbox_1"></label><br>
+нота не в тональности?<label><input type="checkbox" class="checkbox_0"></label><br>
+в тональности?<label><input type="checkbox" class="checkbox_1"></label><br>
+нота слишком низко-высоко?<label><input type="checkbox" class="checkbox_0"></label><br>
+умеренная? (контекст - бас+микс)<label><input type="checkbox" class="checkbox_1"></label><br>
+громче-тише баса?<label><input type="checkbox" class="checkbox_0"></label><br>
+на равне? - хорошо<label><input type="checkbox" class="checkbox_1"></label><br>
 
 
-
-
-
-
+<span id="result"><button onclick="countCheckboxes()">Посчитать</button></span>
+</p>
+<script>
+function countCheckboxes() {
+const checkbox_0Checked = document.querySelectorAll('.checkbox_0:checked').length;
+const checkbox_1Checked = document.querySelectorAll('.checkbox_1:checked').length;
+document.getElementById('result').textContent =
+`${checkbox_1Checked} баллов`;}
+</script>
 
 <div>&emsp;</div>
 <div>&emsp;</div>
